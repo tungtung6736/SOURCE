@@ -1,7 +1,3 @@
--- YOKUDO HUB | Steal An Egg | MERGED ALL MODULES
--- Source: https://github.com/betdoyvaka/stealanegg
--- No remote HttpGet for modules; all inlined.
-
 local _MERGED = {}
 _MERGED["Config.lua"] = [=[
 -- ==================================================
