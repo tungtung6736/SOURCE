@@ -1,4 +1,3 @@
--- https://discord.gg/JD4s8wrvVH
 local ChilliLibrary
 do
     local SetupLoadingScreenOverlay = function()
