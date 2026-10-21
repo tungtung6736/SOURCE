@@ -1,12 +1,3 @@
---[[
-  Oxide HUB | Ein Ei stehlen (Steal an Egg) — Standalone Combined
-  Library + Script tek dosyada. Executor'da loadstring / execute ile çalıştır.
-  PlaceId: 107778070777162 (Steal an Egg)
-]]
-
--- ==============================================================================
--- UI LIBRARY (OxideUiLibary2)
--- ==============================================================================
 local Library = (function()
 local TweenService     = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
