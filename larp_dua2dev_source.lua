@@ -63,6 +63,15 @@ local Player = Players.LocalPlayer
 local Mouse = Player:GetMouse()
 local playerGui = Player:WaitForChild("PlayerGui")
 local getParentGui = (gethui or function() return CoreGui end)
+if not newcclosure then newcclosure = function(f) return f end end
+if not setreadonly then setreadonly = function() end end
+if not getrawmetatable then getrawmetatable = function(o) return getmetatable(o) end end
+if not getnamecallmethod then getnamecallmethod = function() return "" end end
+if not fireproximityprompt then fireproximityprompt = function() end end
+if not setclipboard then setclipboard = function() end end
+if not writefile then writefile = function() end end
+if not readfile then readfile = function() return "" end end
+if not isfile then isfile = function() return false end end
 
 local function PlaySoundEffect(soundId, volume)
     pcall(function()
@@ -100,17 +109,17 @@ local function SetFastPrompt(state)
     if FastPrompt.ShownConn then FastPrompt.ShownConn:Disconnect() FastPrompt.ShownConn = nil end
 
     if FastPrompt.Enabled then
-
+        
         FastPrompt.AddConn = workspace.DescendantAdded:Connect(function(d)
             if FastPrompt.Enabled and d:IsA("ProximityPrompt") then
                 pcall(MakePromptInstant, d)
             end
         end)
-
+        
         FastPrompt.ShownConn = ProximityPromptService.PromptShown:Connect(function(prompt)
             if FastPrompt.Enabled then pcall(MakePromptInstant, prompt) end
         end)
-
+        
         task.spawn(function()
             local n = 0
             for _, d in ipairs(workspace:GetDescendants()) do
@@ -121,7 +130,7 @@ local function SetFastPrompt(state)
             end
         end)
     else
-
+        
         for prompt, orig in pairs(FastPrompt.Original) do
             if prompt.Parent then pcall(function() prompt.HoldDuration = orig end) end
             FastPrompt.Original[prompt] = nil
@@ -132,7 +141,7 @@ end
 pcall(function()
     ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt)
         if not FastPrompt.Enabled then return end
-        if FastPrompt.Original[prompt] ~= nil then return end
+        if FastPrompt.Original[prompt] ~= nil then return end 
         pcall(function()
             MakePromptInstant(prompt)
             if fireproximityprompt then fireproximityprompt(prompt) end
@@ -160,7 +169,9 @@ end
 
 safeDestroy("TUNGTUNG_hub_Core", getParentGui())
 safeDestroy("AutoTypingOverlay", playerGui)
+safeDestroy("AutoTypingOverlay", getParentGui())
 safeDestroy("Tungtung", playerGui)
+safeDestroy("Tungtung", getParentGui())
 
 local SaveFileName = "TungtungNgonNgu.json"
 
@@ -194,7 +205,7 @@ local loadingGui = Instance.new("ScreenGui")
 loadingGui.Name = "AutoTypingOverlay"
 loadingGui.IgnoreGuiInset = true
 loadingGui.ResetOnSpawn = false
-loadingGui.Parent = playerGui
+loadingGui.Parent = getParentGui()
 
 local bg = Instance.new("Frame")
 bg.Size = UDim2.new(1, 0, 1, 0)
@@ -531,7 +542,7 @@ do
                     c = Color3.fromRGB(0, 255, 100)
                 end
                 dot.BackgroundColor3 = c
-
+                
                 local glow = DotGlow[dot]
                 if glow then glow.Color = c end
             else
@@ -795,11 +806,11 @@ do
     inner.BorderSizePixel = 0
     inner.Active = false
     Instance.new("UICorner", inner).CornerRadius = UDim.new(0, 12)
-    local st = ApplyThemeBorder(inner, 1.5)
+    local st = ApplyThemeBorder(inner, 1.5) 
     st.Transparency = 0.05
 end
 
-local STREAK_SPEED = 120
+local STREAK_SPEED = 120 
 local function MakeStaticStreak(stroke, baseAlpha, peakAlpha)
     local g = Instance.new("UIGradient", stroke)
     g.Rotation = 45
@@ -820,7 +831,7 @@ local function MakeStaticStreak(stroke, baseAlpha, peakAlpha)
 end
 
 do
-
+    
     local ring = Instance.new("Frame", ToggleBtn)
     ring.Name = "GlowRing"
     ring.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -833,6 +844,7 @@ do
     local thin = ApplyThemeBorder(ring, 2.5)
     MakeStaticStreak(thin, 0.72, 0.1)
 
+    
     local halo = Instance.new("Frame", ToggleBtn)
     halo.Name = "GlowHalo"
     halo.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -948,11 +960,12 @@ local function CreateTag(id)
     st.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     st.Transparency = 1
 
+    
     local bar = Instance.new("Frame", t)
     bar.Name = "Bar"
     bar.AnchorPoint = Vector2.new(0, 0.5)
     bar.Size = UDim2.new(0, 4, 0, 20)
-    bar.Position = UDim2.new(0, -16, 0.5, 0)
+    bar.Position = UDim2.new(0, -16, 0.5, 0) 
     bar.BackgroundColor3 = Color3.fromRGB(230, 20, 30)
     bar.BorderSizePixel = 0
     bar.Visible = false
@@ -1213,7 +1226,7 @@ task.spawn(function()
                 Lighting.ClockTime = 14
                 Lighting.FogEnd = 786303
                 Lighting.GlobalShadows = false
-
+                
                 if _G.SkyMode == "Normal" and not DiscoActive then
                     Lighting.Ambient = Color3.fromRGB(178, 178, 178)
                 end
@@ -1270,7 +1283,7 @@ local function ToggleDiscoSystem(state)
     else
         if TacosSound.IsPlaying then TacosSound:Stop() end
         RestoreLightingColors()
-
+        
         if _G.SkyMode == "Static" and _G.SkyStaticColor then
             Lighting.OutdoorAmbient = _G.SkyStaticColor
             Lighting.Ambient = _G.SkyStaticColor
@@ -1298,7 +1311,7 @@ local function RestoreGameSky()
 end
 
 local function ResetSkyEffects()
-    _G.SkyToken = _G.SkyToken + 1
+    _G.SkyToken = _G.SkyToken + 1   
     _G.Sky666Active = false
     _G.SkyMode = "Normal"
     _G.SkyStaticColor = nil
@@ -1347,7 +1360,7 @@ local function ApplySkyColor(color, mode, key)
         Lighting.Ambient = color
         Lighting.FogColor = color
     end
-
+    
 end
 
 local function Enable666Sky(key)
@@ -1523,7 +1536,7 @@ _G.CamUnlockStatus = false
 local function CamUnlockApply()
     pcall(function()
         if Player.CameraMode ~= Enum.CameraMode.Classic then Player.CameraMode = Enum.CameraMode.Classic end
-
+        
         if Player.CameraMaxZoomDistance ~= CAM_MAX_ZOOM then Player.CameraMaxZoomDistance = CAM_MAX_ZOOM end
         if Player.CameraMinZoomDistance ~= CamUnlock.Min then Player.CameraMinZoomDistance = CamUnlock.Min end
     end)
@@ -1541,9 +1554,9 @@ local function SetCamUnlock(state)
             Min = Player.CameraMinZoomDistance,
             Max = Player.CameraMaxZoomDistance,
         }
-
+        
         CamUnlock.Min = CAM_START_ZOOM
-
+        
         RunService:BindToRenderStep("Tungtung_CamUnlock", Enum.RenderPriority.Camera.Value - 1, CamUnlockApply)
         local token = CamUnlock.Token
         task.delay(0.8, function()
@@ -1950,6 +1963,7 @@ end
 LoadTag[12] = function()
     ClearScroll() HighlightTab(12) UpdateHeaders() local text = LangPack[_G.CurrentLang]
 
+    
     local function AddInfo(label, value)
         local frame = Instance.new("Frame", ScrollList)
         frame.Size = UDim2.new(0, 154, 0, 36)
@@ -2002,6 +2016,7 @@ LoadTag[12] = function()
     local _, setCreated = AddInfo(text.ProfCreated, CreatedText or text.ProfLoading)
     AddInfo(text.ProfRobux, ReadRobux() or text.ProfNA)
 
+    
     task.spawn(function()
         local t0 = os.clock()
         while os.clock() - t0 < 8 and not (MapName and CreatedExact) do
@@ -2142,18 +2157,6 @@ task.spawn(function()
         TweenService:Create(percentLabel, out, {TextTransparency = 1}):Play()
         TweenService:Create(barTrack, out, {BackgroundTransparency = 1}):Play()
         TweenService:Create(barFill, out, {BackgroundTransparency = 1}):Play()
-
-        task.wait(0.4)
-    end)
-
-    if loadingGui and loadingGui.Parent then loadingGui:Destroy() end
-
-    ToggleBtn.Visible = true
-    LoadTag[1]()
-    ToggleMenu()
-    SendRobloxNotification("Tungtung Hub", "Khởi chạy thành công V2.0!", 3)
-end)
-{BackgroundTransparency = 1}):Play()
 
         task.wait(0.4)
     end)
